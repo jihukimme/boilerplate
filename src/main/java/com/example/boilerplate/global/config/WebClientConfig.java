@@ -7,10 +7,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebClientConfig {
 
+    // 추후 연결 필요시 baseUrl 연결 설정
+    private final String baseUrl = "http://localhost:8080"; // 임시 기본값 설정
+
     @Bean
-    public WebClient fastApiWebClient() {
+    public WebClient externalWebClient() {
         return WebClient.builder()
-                .baseUrl("http://langchain:8000/api/v1") // Docker 네트워크에서 접근
+                .baseUrl(baseUrl)
                 .build();
     }
 }
