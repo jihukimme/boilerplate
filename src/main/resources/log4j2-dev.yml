@@ -1,0 +1,24 @@
+Configuration:
+  status: WARN
+
+  Appenders:
+    Console:
+      name: Console_Appender
+      target: SYSTEM_OUT
+      PatternLayout:
+        disableAnsi: false # ANSI 색상 활성화
+        pattern: "%d{HH:mm:ss.SSS} [%t] %highlight{%-5level} %logger{36} - %msg%n"
+
+  Loggers:
+    Root:
+      level: INFO
+      AppenderRef:
+        ref: Console_Appender
+
+    # 내 프로젝트 패키지 로그를 상세히(DEBUG) 출력
+    Logger:
+      - name: com.example # 실제 본인의 패키지 경로로 수정 필수!
+        level: DEBUG
+        additivity: false
+        AppenderRef:
+          ref: Console_Appender

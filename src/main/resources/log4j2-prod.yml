@@ -1,0 +1,37 @@
+Configuration:
+  status: WARN
+  properties:
+    property:
+      name: logPath
+      value: "logs"
+
+  Appenders:
+    # 운영 환경에서도 실시간 모니터링을 위해 콘솔은 유지 (INFO 레벨 이상만)
+    Console:
+      name: Console_Appender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"
+
+    # 파일 롤링 설정
+    RollingFile:
+      name: File_Appender
+      fileName: "${logPath}/app.log"
+      filePattern: "${logPath}/app-%d{yyyy-MM-dd}-%i.log.gz"
+      PatternLayout:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"
+      Policies:
+        TimeBasedTriggeringPolicy:
+          interval: 1      # 매일 새로운 파일 생성
+          modulate: true
+        SizeBasedTriggeringPolicy:
+          size: "100MB"    # 100MB가 넘으면 날짜 안 지나도 파일 새로 생성
+      DefaultRolloverStrategy:
+        max: 30            # 최대 파일 개수 유지
+
+  Loggers:
+    Root:
+      level: INFO
+      AppenderRef:
+        - ref: Console_Appender
+        - ref: File_Appender

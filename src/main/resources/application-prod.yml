@@ -1,0 +1,43 @@
+# ===============================================================
+# [Production] 운영 환경 설정 - 보안 및 성능 최적화 중심
+# ===============================================================
+spring:
+  config:
+    activate:
+      on-profile: prod # 이 파일은 'prod' 프로필일 때만 활성화됨
+
+  # 운영용 데이터베이스 설정
+  datasource:
+    url: ${PROD_DB_URL}
+    username: ${PROD_DB_USERNAME}
+    password: ${PROD_DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20 # 운영 환경은 동시 접속을 고려해 넉넉하게 설정
+
+  # JPA 보안 설정
+  jpa:
+    hibernate:
+      ddl-auto: validate # 운영 서버에서는 테이블을 건드리지 않고, 구조가 맞는지만 체크
+    show-sql: false      # 운영 시 SQL 로그 노출은 보안 위험 및 성능 저하 유발
+    properties:
+      hibernate:
+        format_sql: false
+
+  # 렌더링 성능 최적화
+  thymeleaf:
+    cache: true # 개발 시와 달리 캐시를 켜서 매번 파일을 읽지 않게 함
+
+# 운영용 로그 설정 파일 연결 (Log4j2)
+logging:
+  config: classpath:log4j2-prod.yml
+
+# 서버 헬스체크 및 모니터링 활성화
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# 운영용 보안 키 (외부에 노출되지 않도록 환경 변수 사용)
+app:
+  jwtSecret: ${PROD_JWT_SECRET}

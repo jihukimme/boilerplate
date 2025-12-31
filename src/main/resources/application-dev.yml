@@ -1,0 +1,36 @@
+# ===============================================================
+# [Development] 개발 환경 설정 - 디버깅 및 로컬 테스트 중심
+# ===============================================================
+spring:
+  config:
+    activate:
+      on-profile: dev # 이 파일은 'dev' 프로필일 때만 활성화됨
+
+  # 개발용 데이터베이스 설정
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 로컬 환경 변수 사용 권장
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:mydb}?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+    hikari:
+      maximum-pool-size: 5 # 개발용은 커넥션 풀을 적게 유지하여 자원 절약
+
+  # JPA/Hibernate 설정
+  jpa:
+    hibernate:
+      ddl-auto: update # 엔티티 변경 시 테이블 자동 업데이트 (개발 시 편의성 고려)
+    show-sql: true     # 실행되는 모든 SQL을 콘솔에 출력
+    properties:
+      hibernate:
+        format_sql: true    # SQL을 읽기 좋게 한 줄씩 정렬
+        highlight_sql: true # SQL 문법을 색상으로 강조 (IDE 지원 시)
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+# 개발용 로그 설정 파일 연결 (Log4j2)
+logging:
+  config: classpath:log4j2-dev.yml
+
+# 개발용 보안 키
+app:
+  jwtSecret: ${JWT_SECRET}
