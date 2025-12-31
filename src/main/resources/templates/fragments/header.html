@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+</head>
+
+<body>
+<header class="p-4 py-3 border-bottom bg-dark header_components" th:fragment="header">
+    <div class="container">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-0" aria-label="Fifth navbar example">
+            <div class="container-fluid p-0">
+                <a class="navbar-brand" href="/">PersonaBook</a>
+
+           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="true" aria-label="Toggle
+  navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <div class="navbar-collapse collapse" id="navbarsExample05">
+                  <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                      <li class="nav-item" id="login-nav" style="display: none;">
+                          <a class="nav-link" th:href="@{'/auth/login'}">로그인</a>
+                      </li>
+                      <li class="nav-item" id="login-join" style="display: none;">
+                          <a class="nav-link" th:href="@{'/auth/register'}">회원가입</a>
+                      </li>
+                      <li class="nav-item" id="logout-nav" style="display: none;">
+                          <a class="nav-link" href="#" onclick="logout()">로그아웃</a>
+                      </li>
+                      <li class="nav-item dropdown" id="logout-menu" style="display: none;">
+                          <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-bs-toggle="dropdown" aria-expanded="false">내 정보</a>
+                          <ul class="dropdown-menu" aria-labelledby="dropdown05">
+                              <li><a class="dropdown-item" th:href="@{'/user/profile'}">프로필</a></li>
+                          </ul>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link active" aria-current="page" href="/">Home</a>
+                      </li>
+                  </ul>
+              </div>
+            </div>
+        </nav>
+    </div>
+</header>
+</body>
+</html>
