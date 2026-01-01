@@ -3,7 +3,7 @@
 services: # 여러 개의 컨테이너를 정의할 수 있는 블록
   application: # 내부 네트워크에서 application으로 접근 가능
     build:
-      context: ./application-server/application # Dockerfile이 위치한 경로
+      context: ./application # Dockerfile이 위치한 경로
     container_name: application-container
     ports:
       - "8080:8080" # 호스트 포트 : 컨테이너 포트 매핑
@@ -17,7 +17,7 @@ services: # 여러 개의 컨테이너를 정의할 수 있는 블록
       - backend
 
   mysql: # 내부 네트워크에서 mysql로 접근 가능
-    image: mysql:8.0.33
+    image: mysql:8.0
     container_name: mysql-container
     ports:
       - "3307:3306"
@@ -29,7 +29,7 @@ services: # 여러 개의 컨테이너를 정의할 수 있는 블록
       - .env.dev
       - .env.prod
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
     healthcheck:
       test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} || exit 1" ]
       interval: 10s
