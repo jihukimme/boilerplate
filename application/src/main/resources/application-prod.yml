@@ -8,9 +8,9 @@ spring:
 
   # 운영용 데이터베이스 설정
   datasource:
-    url: ${PROD_DB_URL}
-    username: ${PROD_DB_USERNAME}
-    password: ${PROD_DB_PASSWORD}
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:application}?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:1234}
     hikari:
       maximum-pool-size: 20 # 운영 환경은 동시 접속을 고려해 넉넉하게 설정
 
@@ -41,4 +41,4 @@ management:
 # 운영용 보안 키 (외부에 노출되지 않도록 환경 변수 사용)
 app:
   jwt:
-    secret: ${PROD_JWT_SECRET}
+    secret: ${JWT_SECRET}
