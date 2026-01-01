@@ -57,6 +57,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
 
+    // actuator
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+
     /**
      * [EXTENSIONS] - 기능별 선택 사항 (필요 없으면 삭제)
      */
