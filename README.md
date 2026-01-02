@@ -220,8 +220,7 @@ Docker Compose가 `.env.dev` 또는 `.env.prod` 파일에 정의된 `SPRING_PROF
 
 - [ ] **로깅 시스템 고도화**: 현재 기본적인 로깅 설정 외에, AOP를 활용한 로깅 전략이나 모니터링 툴 연동 등 로깅 시스템을 구체적으로 발전시킬 예정
 - [ ] **common 패키지 설계**: paging, BaseEntity 등 공통 유틸 사용 및 적용
-- [ ] **Redis Config 설계**:
-- [ ] **AsyncConfig 설계**:
+- [ ] **config 설계**: AsyncConfig, RedisConfig 등 다양한 config
 
 
 
