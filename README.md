@@ -91,7 +91,7 @@ env_file:
 
 ### 설정 파일 관리
 
-환경별(`dev`, `prod`) 설정을 분리하여 관리합니다. `application.yml`의 공통 설정을 기반으로, 활성화된 프로필에 따라 특정 환경 설정이 **병합(Merge)**됩니다.
+환경별(`dev`, `prod`) 설정을 분리하여 관리합니다. `application.yml`의 공통 설정을 기반으로, 활성화된 프로필에 따라 특정 환경 설정이 병합(Merge)됩니다.
 
 - `application.yml`: 모든 환경 공통 설정 (기본값)
 - `application-dev.yml`: 개발 환경 전용 (Debug 로깅, 로컬 DB 연결 등)
@@ -205,13 +205,13 @@ Docker Compose가 `.env.dev` 또는 `.env.prod` 파일에 정의된 `SPRING_PROF
 일관성 있고 유지보수하기 좋은 코드를 위해, 프로젝트 내에서 합의된 다음 규칙들을 준수합니다.
 
 - **파라미터 네이밍**: 변수명에 타입을 불필요하게 반복하지 않고 의도를 명확히 합니다. (예: `LoginRequestDto loginRequestDto`  ➡ `LoginRequestDto request`)
-- **계층 간 참조 제약**: Controller는 절대로 Repository에 직접 접근하지 않으며, 반드시 **Service** 계층을 거쳐 비즈니스 로직을 수행해야 합니다.
-- **Setter 사용 지양**: Entity와 DTO의 무결성을 위해 무분별한 `@Setter` 사용을 금지합니다. Entity 상태 변경이 필요할 경우, 명확한 의도를 가진 **비즈니스 메소드**를 구현하여 사용합니다.
-- **DTO 변환**: Entity ↔ DTO 변환 시에는 생성자보다 `from`, `of`와 같은 **정적 팩토리 메소드(Static Factory Method)** 사용을 권장합니다. (단, 로직에 따라 유연하게 적용)
+- **계층 간 참조 제약**: Controller는 절대로 Repository에 직접 접근하지 않으며, 반드시 Service 계층을 거쳐 비즈니스 로직을 수행해야 합니다.
+- **Setter 사용 지양**: Entity와 DTO의 무결성을 위해 무분별한 `@Setter` 사용을 금지합니다. Entity 상태 변경이 필요할 경우, 명확한 의도를 가진 비즈니스 메소드를 구현하여 사용합니다.
+- **DTO 변환**: Entity ↔ DTO 변환 시에는 생성자보다 `from`, `of`와 같은 정적 팩토리 메소드 사용을 권장합니다. (단, 로직에 따라 유연하게 적용)
 - **예외 처리 및 로깅**:
     - **Controller**: `try-catch` 블록 사용을 지양하고, `GlobalExceptionHandler`에게 처리를 위임하여 코드를 깔끔하게 유지합니다.
     - **Service**: 비즈니스 로직에서 예외 상황 발생 시 로깅한 후 예외를 던집니다(`throw`).
-- **단일 데이터 DTO 래핑**: 반환할 데이터가 단 하나(문자열, 숫자 등)인 경우에도, 확장성을 위해 반드시 **DTO 객체에 담아서 반환**합니다.
+- **단일 데이터 DTO 래핑**: 반환할 데이터가 단 하나(문자열, 숫자 등)인 경우에도, 확장성을 위해 반드시 DTO 객체에 담아서 반환합니다.
 
 
 ---
