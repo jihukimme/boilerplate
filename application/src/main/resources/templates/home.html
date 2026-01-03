@@ -2,30 +2,13 @@
 <html layout:decorate="~{layout/layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head>
-    <link rel="stylesheet" th:href="@{/css/book.css}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script th:src="@{/js/book.js}"></script>
-
-    <script>
-    // PDF.js 설정
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-    // CMap 설정 (한국어 폰트 지원)
-    pdfjsLib.cMapUrl = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/';
-    pdfjsLib.cMapPacked = true;
-    </script>
-</head>
-
 <body>
 <div layout:fragment="content">
     <div class="container d-flex justify-content-center align-items-center flex-direction-column">
         <div class="col-lg-6 col-12 my-5">
             <div class="w-100">
 
-
                 <h1 class="fw-bold mb-4 text-center">홈 페이지</h1>
-
 
             </div>
         </div>
