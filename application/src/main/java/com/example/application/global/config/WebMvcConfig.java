@@ -33,7 +33,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/public/**",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
-                        "/favicon.ico",
                         "/error"
                 );
     }
