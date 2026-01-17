@@ -85,7 +85,7 @@ function initRegister() {
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
         const phoneNumber = document.getElementById('userPhoneNumber').value;
-        const birthDate = birthInput?.value || '';
+        const birthDate = document.getElementById('userBirthDate').value;
         const job = document.getElementById('userJob').value;
 
         // 유효성 검사 로직
