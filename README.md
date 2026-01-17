@@ -130,14 +130,6 @@ Docker Compose가 `.env.dev` 또는 `.env.prod` 파일에 정의된 `SPRING_PROF
 - **domain/user**: 사용자 정보 조회, 수정, 탈퇴 등 회원 관리 로직
 - *(추후 확장 시 domain/order, domain/payment 등으로 추가)*
 
-### common 패키지
-
-모든 도메인에서 공통적으로 사용되는 로우 레벨의 유틸리티나 엔티티를 관리하여 코드 중복을 방지합니다.
-
-- **common/dto**: 페이징 요청/응답(PageRequestDto, PageResponseDto)과 같이 여러 도메인에서 공통으로 재사용되는 DTO 관리
-- **common/entity**: BaseEntity(생성일, 수정일)와 같이 모든 테이블에 공통으로 상속되는 JPA 엔티티 관리
-- **common/util**: 날짜 계산, 문자열 처리 등 도메인 비즈니스 로직에 종속되지 않는 순수 유틸리티 클래스
-
 ### global 패키지
 
 애플리케이션 전반에 영향을 미치는 공통 관심사를 비즈니스 로직과 분리하여 관리합니다.
@@ -156,47 +148,46 @@ Docker Compose가 `.env.dev` 또는 `.env.prod` 파일에 정의된 `SPRING_PROF
 - **global/exception**: 전역 예외 처리 핸들러 및 에러 코드 관리
     - **ErrorCode**: 애플리케이션 내 발생하는 모든 예외 메시지와 코드를 Enum으로 중앙 관리합니다.
     - **GlobalExceptionHandler**: `@RestControllerAdvice`를 통해 Controller 및 Service 계층에서 던져진 예외를 전역적으로 포착(Catch)하여 표준 포맷으로 변환합니다.
- 
 
-- **global/dto**: 응답 형태를 통일하기 위한 API 표준 응답 형태(ApiResponseDto) 정의
-    - **Anti-Soft 200 전략**: 에러 발생 시 상태 코드가 200으로 고정되는 문제를 방지하기 위해, GlobalExceptionHandler에서는 `ResponseEntity`로 감싸 명확한 HTTP Status Code(400, 404, 500 등)를 반환합니다.
-    - **Controller 전략**: Controller에서는 `try-catch` 블록을 지양하여 코드를 깔끔하게 유지하며, 성공 시 `ApiResponseDto`를 반환하여 데이터 형태의 일관성을 확보합니다.
-    - **Service 전략**: 비즈니스 로직에서 예외 상황 발생 시 로깅한 후, 예외를 던집니다(`throw`).
-    - **구조 및 응답 예시**:
-        - **구조**:
-            
-            ```java
-            // [Class Structure]
-            public class ApiResponseDto<T> {
-                private final boolean success; // 성공 여부
-                private final String code;     // 비즈니스 코드 ("200", "ERR-404" 등)
-                private final String message;  // 응답 메시지
-                private final T data;          // 실제 데이터 Payload
-            }
-            ```
-            
-        - **응답**:
-            
-            ```json
-            // [Response Example - Success (HTTP 200)]
-            {
-              "success": true,
-              "code": "200",
-              "message": "요청이 성공적으로 처리되었습니다.",
-              "data": { "id": 1, "username": "user1" }
-            }
-            ```
-            
-            ```json
-            // [Response Example - Failure (HTTP 400)]
-            {
-              "success": false,
-              "code": "ERR-400",
-              "message": "잘못된 요청 파라미터입니다.",
-              "data": null
-            }
-            ```
 
+- **global/common**: 모든 도메인에서 공통적으로 사용되는 로우 레벨의 객체 및 표준 규격을 관리하여 코드 중복을 방지합니다.
+    - **global/common/entity**: `BaseEntity`(생성일, 수정일)와 같이 모든 테이블에 공통으로 상속되는 JPA 엔티티 관리
+    - **global/common/dto**: 페이징 요청/응답(`PageRequestDto`) 및 API 표준 응답 형태(`ApiResponseDto`)와 같이 전역에서 재사용되는 DTO를 정의합니다.
+        - **Anti-Soft 200 전략**: 에러 발생 시 상태 코드가 200으로 고정되는 문제를 방지하기 위해, `GlobalExceptionHandler`에서 `ResponseEntity`로 감싸 명확한 HTTP Status Code(400, 404, 500 등)를 반환합니다.
+        - **Controller 전략**: Controller에서는 `try-catch` 블록을 지양하여 코드를 깔끔하게 유지하며, 성공 시 `ApiResponseDto`를 반환하여 데이터 형태의 일관성을 확보합니다.
+        - **Service 전략**: 비즈니스 로직에서 예외 상황 발생 시 로깅한 후, 예외를 던집니다(`throw`).
+        - **구조 및 응답 예시**:
+          - **구조**:
+              ```java
+              // [Class Structure]
+              public class ApiResponseDto<T> {
+                  private final boolean success; // 성공 여부
+                  private final String code;     // 비즈니스 코드 ("200", "ERR-404" 등)
+                  private final String message;  // 응답 메시지
+                  private final T data;          // 실제 데이터 Payload
+              }
+              ```
+          - **응답**:
+              ```json
+              // [Response Example - Success (HTTP 200)]
+              {
+                "success": true,
+                "code": "200",
+                "message": "요청이 성공적으로 처리되었습니다.",
+                "data": { "id": 1, "username": "user1" }
+              }
+              ```
+              ```json
+              // [Response Example - Failure (HTTP 400)]
+              {
+                "success": false,
+                "code": "ERR-400",
+                "message": "잘못된 요청 파라미터입니다.",
+                "data": null
+              }
+              ```
+
+- **global/util**: 날짜 계산, 문자열 처리 등 도메인 비즈니스 로직에 종속되지 않는 순수 유틸리티 클래스를 관리합니다.
 
 ---
 
