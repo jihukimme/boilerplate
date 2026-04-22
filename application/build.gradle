@@ -59,6 +59,7 @@ dependencies {
 
     // actuator
     implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "io.micrometer:micrometer-registry-prometheus"
 
     /**
      * [EXTENSIONS] - 기능별 선택 사항 (필요 없으면 삭제)
