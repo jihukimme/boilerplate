@@ -98,7 +98,7 @@ services: # 여러 개의 컨테이너를 정의할 수 있는 블록
     image: prom/node-exporter:latest
     container_name: node-exporter-container
     ports:
-      - "9100:9100"
+      - "127.0.0.1:9100:9100" # Node Exporter 보안 강화 (로컬 호스트 및 내부망 전용)
     networks:
       - backend
 
