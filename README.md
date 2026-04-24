@@ -15,7 +15,7 @@
 - **Database**: MySQL, Redis
 - **Logging**: Log4j2 (기존 Logback 제외 및 성능 최적화)
 - **Template Engine**: Thymeleaf
-- **Infrastructure**: Docker, Docker Compose
+- **Infrastructure**: Docker, Docker Compose, Prometheus, Grafana
 - **...**
 
 
@@ -191,6 +191,36 @@ Docker Compose가 `.env.dev` 또는 `.env.prod` 파일에 정의된 `SPRING_PROF
 
 ---
 
+## 📊 서버 모니터링 시스템 구축 전략
+
+효율적인 서버 운영과 장애 대응을 위해 로그 수집 및 메트릭 모니터링 시스템을 구축했습니다.
+
+### 1. 로그 (Logs)
+- **Promtail**: 각 서버(Java, Python 등)에서 발생하는 로그 파일을 실시간으로 읽고, 검색에 필요한 태그(라벨)를 붙여 전송합니다.
+- **Loki**: Promtail이 전송한 로그를 저장하고 관리하는 로그 데이터베이스입니다. 라벨 인덱싱을 통해 빠른 검색을 지원합니다.
+
+### 2. 메트릭 (Metrics)
+- **Spring Actuator**: Java 애플리케이션 내부의 상태(API 응답 시간, JVM 메모리, HTTP 요청 횟수 등)를 메트릭 데이터로 추출합니다.
+- **Node Exporter**: 서버 OS 레벨의 상태(CPU 사용률, 메모리, 디스크 사용량 등)를 메트릭 데이터로 추출합니다.
+- **Prometheus**: 위 메트릭들을 주기적으로 수집(Scraping)하고 저장하는 시계열 데이터베이스입니다.
+
+### 3. 시각화 및 통합 관리
+- **Grafana**: Loki(로그)와 Prometheus(메트릭) 데이터를 통합하여 그래프와 표 형태로 시각화하는 대시보드입니다.
+- **Grafana Agent / Alloy**: Prometheus, Promtail, Node Exporter의 기능을 하나로 합친 차세대 통합 수집기입니다. (리소스 최적화 및 설정 간소화)
+- **Grafana Cloud**: 모니터링 인프라를 직접 운영하지 않고 클라우드 환경에서 즉시 사용할 수 있게 해주는 SaaS 플랫폼입니다.
+
+### 🏠 로컬 환경 모니터링 (Docker 기반)
+로컬 개발 환경에서는 클라우드 의존성 없이 독립적으로 실행하기 위해 모든 모니터링 컴포넌트를 Docker 컨테이너로 직접 띄워 운영합니다.
+- **구성**: `Loki`, `Promtail`, `Prometheus`, `Node Exporter`, `Grafana`
+
+### ☁️ 배포 환경 모니터링 (Grafana Cloud & Security)
+운영 환경에서는 관리 효율성과 보안을 위해 다음과 같은 전략을 채택합니다.
+- **Grafana Cloud 도입**: 배포 환경에서는 Grafana Cloud를 활용해 인프라 운영 부담을 최소화하고, 중앙 집중식 모니터링을 수행합니다.
+- **Grafana Agent 활용**: 서버에 별도의 Prometheus를 설치하는 대신 Grafana Agent를 통해 메트릭을 수집 및 전송하여 리소스를 최적화합니다.
+- **보안 강화 (Actuator 전용 포트)**: 모니터링 데이터는 민감한 정보를 포함할 수 있으므로, Actuator 전용 포트(`8081`)를 분리하고 내부망(Docker Network, Localhost)에서만 접근 가능하도록 제한합니다.
+
+---
+
 ## 🎨 개발 컨벤션 및 규칙
 
 일관성 있고 유지보수하기 좋은 코드를 위해, 프로젝트 내에서 합의된 다음 규칙들을 준수합니다.
@@ -209,7 +239,6 @@ Docker Compose가 `.env.dev` 또는 `.env.prod` 파일에 정의된 `SPRING_PROF
 
 ## 🗓 TODO
 
-- [ ] **로깅 시스템 고도화**: 현재 기본적인 로깅 설정 외에, AOP를 활용한 로깅 전략이나 모니터링 툴 연동 등 로깅 시스템을 구체적으로 발전시킬 예정
 - [ ] **global 패키지 설계**: 추가적으로 공통 관심사 분리 시키기(paging, BaseEntity 등), 공통 유틸 패키지 추가
   - [ ] **global/config 설계**: AsyncConfig, RedisConfig 등 다양한 config
 
