@@ -33,13 +33,6 @@ spring:
 logging:
   config: classpath:log4j2-prod.yml
 
-# 서버 헬스체크 및 모니터링 활성화
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
-
 # 운영용 보안 키 (외부에 노출되지 않도록 환경 변수 사용)
 app:
   jwt:
